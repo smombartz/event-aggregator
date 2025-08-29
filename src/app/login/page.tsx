@@ -21,10 +21,8 @@ export default function LoginPage() {
     setLoading(true);
     try {
       await signInWithGoogle();
-      router.push('/dashboard');
     } catch (error) {
       console.error('Failed to sign in:', error);
-    } finally {
       setLoading(false);
     }
   };

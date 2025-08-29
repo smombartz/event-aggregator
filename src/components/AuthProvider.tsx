@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
-import { getUserData } from '@/lib/auth';
+import { getUserData, handleRedirectResult } from '@/lib/auth';
 import { User as AppUser } from '@/types';
 
 interface AuthContextType {
@@ -26,6 +26,11 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Handle redirect result first
+    handleRedirectResult().catch((error) => {
+      console.error('Error handling redirect result:', error);
+    });
+
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser: User | null) => {
       if (firebaseUser) {
         setUser(getUserData(firebaseUser));
